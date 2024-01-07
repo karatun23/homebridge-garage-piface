@@ -18,6 +18,8 @@ function GaragePiFaceAccessory(log, config) {
 
   this.name = config.name
   this.doorSwitchOutput = config.switchOutput
+  this.doorOpenRelay = 0; // PiFace Digital relay 1
+  this.doorCloseRelay = 1; // PiFace Digital relay 2
   this.relayOn = config.switchValue || 1
   this.relayOff = 1-this.relayOn //opposite of relayOn (O/1)
   this.doorSwitchPressTimeInMs = config.switchPressTimeInMs || 1000
@@ -164,14 +166,14 @@ GaragePiFaceAccessory.prototype = {
   },
 
   switchOn: function() {
-    this.writePin(this.doorSwitchOutput, this.relayOn)
-    this.log("Turning on " + this.name + " (Relay " + this.doorSwitchOutput + ") = " + this.relayOn)
-    setTimeout(this.switchOff.bind(this), this.doorSwitchPressTimeInMs)
+    this.writePin(this.doorOpenRelay, this.relayOn);
+    this.log("Turning on " + this.name + " (Relay " + this.doorOpenRelay + ") = " + this.relayOn);
+    setTimeout(this.switchOff.bind(this), this.doorSwitchPressTimeInMs);
   },
 
   switchOff: function() {
-    this.writePin(this.doorSwitchOutput, this.relayOff)
-    this.log("Turning off " + this.name + " (Relay " + this.doorSwitchOutput + ") = " + this.relayOff)
+    this.writePin(this.doorCloseRelay, this.relayOn);
+    this.log("Turning off " + this.name + " (Relay " + this.doorCloseRelay + ") = " + this.relayOn);
   },
 
   setFinalDoorState: function() {
